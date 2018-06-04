@@ -2,31 +2,21 @@ import React, { Component, Fragment } from 'react';
 import './ProgressBar.css';
 import ProgressBar from './ProgressBar';
 import ProgressBarController from './ProgressBarController';
+import 'whatwg-fetch';
 
 const pn = "#progressbar";
 export default class ProgressContainer extends Component {
 
     constructor() {
         super();
-        this.state = {
-            "buttons": [
-                10,
-                38,
-                -13,
-                -18
-            ],
-            "bars": [
-                62,
-                45,
-                62
-            ],
-            "limit": 230
-        }
+        this.fetchDummy();
+    }
 
+    componentDidMount = () => {
+        this.fetchFromEndpoint();
     }
 
     stepUP = (pb, value) => {
-        console.log("chh  " + value + pb);
         const vale = pb.substr(pn.length, pb.length);
         const bars = this.state.bars;
         const tt = bars[vale];
@@ -35,13 +25,10 @@ export default class ProgressContainer extends Component {
             nett = 0;
         }
         bars[vale] = nett;
-        // console.log(nett);
         this.setState({ bars: bars });
-        console.log(nett)
-    }
-    valueChange = () => {
 
     }
+
 
     render() {
 
@@ -62,9 +49,41 @@ export default class ProgressContainer extends Component {
         return (
             <div>
                 {listItems}
-                <ProgressBarController progressbarNames={listbarsNames} stepUP={this.stepUP} />
+                <ProgressBarController progressbarNames={listbarsNames} stepUP={this.stepUP}
+                    buttons={this.state.buttons} />
             </div>
         );
+    }
+
+    fetchFromEndpoint = () => {
+
+        fetch("http://pb-api.herokuapp.com/bars").then((response) => {
+            return response.json();                    
+        }).then((json)=> {         
+            json.buttons.sort((a,b)=>{
+                return a - b;
+            });                      
+            this.setState( json ); 
+          }).catch((ex) => {
+            console.log(ex);
+        });
+    }
+
+    fetchDummy = () => {
+        this.state = {
+            "buttons": [
+                -25,
+                -10,
+                10,
+                25
+            ],
+            "bars": [
+                62,
+                45,
+                62
+            ],
+            "limit": 230
+        }
     }
 }
 

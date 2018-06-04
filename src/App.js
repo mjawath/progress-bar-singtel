@@ -13,7 +13,7 @@ class App extends Component {
         </header>
         <div className="App-intro">
           <ProgressContainer />
-
+          
         </div>
       </div>
     );

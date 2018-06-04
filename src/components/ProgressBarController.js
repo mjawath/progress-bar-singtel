@@ -17,7 +17,9 @@ export default class ProgressBarController extends Component {
         this.setState({ drp: event.target.value });
     }
     render() {
+        // debugger;
         const pb = this.props.progressbarNames;
+        const buttons = this.props.buttons;
         const selectedProgress = this.state.drp || pb[0];
         return (
             <div>
@@ -26,10 +28,10 @@ export default class ProgressBarController extends Component {
                         <option key={item} value={item} >{item}</option>
                     )}
                 </select>
-                <button onClick={e => this.stepUP(selectedProgress, -25)}>-25</button>
-                <button onClick={e => this.stepUP(selectedProgress, -10)}>-10</button>
-                <button onClick={e => this.stepUP(selectedProgress, 10)}>+10</button>
-                <button onClick={e => this.stepUP(selectedProgress, 25)}>+25</button>
+
+                {buttons.map((item,index) =>
+                    <button key={index} onClick={e => this.stepUP(selectedProgress, item)}>{item}</button>
+                )}
             </div>);
     }
 }
